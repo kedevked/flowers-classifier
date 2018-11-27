@@ -7,15 +7,17 @@ The frontend is written in angular. A flower is uploaded to the backend and the 
 
 ### development
 
-    cd frontend
+- change directory
+
+        cd frontend
 
 - install all the dependencies
 
-    npm install
+        npm install
 
 - serve the frontend
      
-     npm start
+        npm start
 
 ## backend
 
@@ -24,14 +26,16 @@ The backend is written with the server flask. The prediction are made using pyto
 
 ### development
 
-    cd backend
+- change directory
+
+        cd backend
 
 - install all the dependencies
 
-    pip3 install -r requirements.txt
+        pip3 install -r requirements.txt
 
 - run the server
 
-    python -m flask run
+        python -m flask run
 
 To make predictions, the server needs to have the file `checkpoint.pth` saved from a flower classifier model written in pytorch
