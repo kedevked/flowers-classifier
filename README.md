@@ -44,8 +44,9 @@ To make predictions, the server needs to have the file `checkpoint.pth` saved fr
 
 - build the image
 
-	sudo docker build . -t server
+        docker build . -t server
 
 - run the container
 
-	docker run --rm --name server -p 5000:5000 server
+        docker run -d -p 5000:5000 server
+
