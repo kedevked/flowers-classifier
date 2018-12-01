@@ -1,12 +1,20 @@
 from flask import Flask
 from flask import request
 from flask import Response
-from predict import predict
+from predict import predict, predict_with_model
 from flask_cors import CORS, cross_origin
 from flask import jsonify
+from werkzeug import secure_filename
+import os
+from numpy.random import randint
+import utils
+
+
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
+os.makedirs('checkpoints', exist_ok=True)
+
 
 @app.route('/predict', methods=['POST', 'GET'])
 @cross_origin()
@@ -19,5 +27,42 @@ def predict_flower():
             return Response('No file uploaded', status=500)
         else :
             return jsonify({"name": predict(request.files['file'])})
+    else:
+        return Response('Bad request', status=500)
+
+
+@app.route('/upload_model', methods=['POST', 'GET'])
+@cross_origin()
+def upload_model():
+    """Stores a checkpoint or saved model and returns a unique ID"""
+
+    if request.method =='POST' and 'model' in request.files :
+        f = request.files['model']
+        sec_file = secure_filename(f.filename)
+        
+
+        # generate random id: TOD0: write a function that checks for conflict
+        model_id = ''.join(str(e) for e in list(randint(0, 9, 20)))
+
+        # insert into model store
+        utils.insert_id(model_id,sec_file)
+        f.save(os.path.join('checkpoints', sec_file))
+        return jsonify({"status": "saved" , "id":model_id})
+    else:
+        return Response('Bad request', status=500)
+
+
+@app.route('/model_predict', methods=['POST', 'GET'])
+@cross_origin()
+def model_predict():
+    """Predicts a flower species based on selected model id"""
+
+    if request.method == 'POST':
+        model_id = request.form.get('model_id')
+        if 'file' not in request.files:
+            return Response('No file uploaded', status=500)
+        else :
+            pred = predict_with_model(request.files['file'], model_id)
+            return jsonify({"name": pred})
     else:
         return Response('Bad request', status=500)
