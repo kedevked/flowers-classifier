@@ -39,3 +39,14 @@ The backend is written with the server flask. The prediction are made using pyto
         python -m flask run
 
 To make predictions, the server needs to have the file `checkpoint.pth` saved from a flower classifier model written in pytorch
+
+### dockerfile to launch the server
+
+- build the image
+
+        docker build . -t server
+
+- run the container
+
+        docker run -d -p 5000:5000 server
+

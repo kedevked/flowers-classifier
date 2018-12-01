@@ -66,3 +66,7 @@ def model_predict():
             return jsonify({"name": pred})
     else:
         return Response('Bad request', status=500)
+
+if __name__ == "__main__":
+    app.run("0.0.0.0", port=5000, debug=True)
+
