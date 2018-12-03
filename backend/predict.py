@@ -11,6 +11,7 @@ from PIL import Image
 import os
 from torch.autograd import Variable
 from collections import OrderedDict
+import utils
 
 parser = argparse.ArgumentParser()
 
@@ -93,6 +94,18 @@ def process_image(image):
 def predict(image_path) :
     print('predict')
     _, classes = predict_top_classes(image_path)
+    print('classes', classes)
+    print('element', classes[0])
+    flowers = get_flowers_name(classes)
+    return flowers[0]
+
+def predict_with_model(image_path, model_id):
+
+    #load model 
+    filepath = utils.get_model_path(model_id)
+    loaded_model = load_checkpoint('checkpoints/'+filepath)
+
+    _, classes = predict_top_classes(image_path,loaded_model)
     print('classes', classes)
     print('element', classes[0])
     flowers = get_flowers_name(classes)
