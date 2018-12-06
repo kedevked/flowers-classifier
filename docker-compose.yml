@@ -1,0 +1,24 @@
+version: '3.5'
+
+services:
+
+  frontend:
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: frontend.dockerfile
+    volumes:
+      - .:/usr/src/
+      - '/usr/src/app/node_modules'
+    ports:
+      - '4200:4200'
+    links: 
+      - backend
+  
+  backend:
+    container_name: backend
+    build:
+      context: .
+      dockerfile: backend.dockerfile
+    ports:
+      - '5000:5000'
