@@ -1,0 +1,29 @@
+.page-wrap {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+.image-card-container {
+    margin: 20px;
+    flex: 1;
+}
+
+.stickyFooter {
+    background: #f5f5f5;
+    padding: 1em;
+    text-align: center;
+    font-size: x-small;
+}
+
+.dividerSpan {
+    flex: 1 1 auto;
+}
+
+.hiddenInput {
+    display:none;
+}
+
+.accentColor {
+    color: rgb(255, 64, 129);
+}
