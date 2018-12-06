@@ -1,0 +1,45 @@
+<mat-toolbar>
+  <span>
+    Flower Identification App 
+  </span>  
+  <span style="flex: 1 1 auto"></span>
+  <button mat-fab [matMenuTriggerFor]="menu" >Actions</button>
+<mat-menu #menu="matMenu">
+  <input id="fileUpload" type="file" (change)="onChange($event)" style="display:none;"/>
+  <label mat-menu-item for="fileUpload">Upload image</label>
+  <button mat-menu-item (click)="predict()">Predict</button>
+</mat-menu>
+</mat-toolbar>
+
+<div class="image-card-containert" style="margin: 20px;">
+  <mat-card>
+    <mat-card-title>
+        <span *ngIf="!imageSrc">
+        <label for="fileUpload">Upload flower photo</label>
+        <input id="fileUpload" type="file" (change)="onChange($event)" style="display:none;"/>
+        </span>
+      <span *ngIf="imageSrc">
+          Flower on the photo:
+
+          <span *ngIf="!flowerName" (click)="predict()" style="float: right;">
+            <button mat-button color="accent">Predict</button>
+          </span> 
+          <span *ngIf="flowerName">
+              {{flowerName}}
+          </span>
+      </span>
+
+    </mat-card-title>
+  
+    <img mat-card-image *ngIf="imageSrc" [src]="imageSrc" />
+   
+</mat-card>
+</div>
+
+
+
+
+
+
+
+<div *ngIf="flowerName">{{flowerName}}</div>
