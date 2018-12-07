@@ -9,7 +9,7 @@ services:
       dockerfile: frontend.dockerfile
     volumes:
       - .:/usr/src/
-      - '/usr/src/app/node_modules'
+      - '/usr/src/frontend/node_modules'
     ports:
       - '4200:4200'
     links: 
