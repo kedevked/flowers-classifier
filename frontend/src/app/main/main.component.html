@@ -1,0 +1,37 @@
+<div class="page-wrap">
+  <mat-toolbar>
+    <span>
+      Flower Identification App
+    </span>
+    <span class="dividerSpan"></span>
+    <button mat-fab [matMenuTriggerFor]="menu">Actions</button>
+    <mat-menu #menu="matMenu">
+      <input id="fileUpload" type="file" (change)="onChange($event)" class="hiddenInput" />
+      <label mat-menu-item for="fileUpload">Upload image</label>
+      <button mat-menu-item (click)="predict()">Predict</button>
+    </mat-menu>
+  </mat-toolbar>
+  <div class="image-card-container">
+    <mat-card>
+      <mat-card-title>
+        <span *ngIf="!imageSrc">
+          <label for="fileUpload">Upload flower photo</label>
+          <input id="fileUpload" type="file" (change)="onChange($event)" class="hiddenInput" />
+        </span>
+        <span *ngIf="imageSrc">
+          Flower:
+          <span *ngIf="!flowerName" (click)="predict()" class="predictButton">
+            <span class="accentColor">Predict</span>
+          </span>
+          <span *ngIf="flowerName">
+            {{flowerName}}
+          </span>
+        </span>
+      </mat-card-title>
+      <img mat-card-image *ngIf="imageSrc" [src]="imageSrc" />
+    </mat-card>
+  </div>
+  <footer class="stickyFooter">
+    You can find this project on <a href="https://github.com/kedevked/flowers-classifier">Github</a>
+  </footer>
+</div>
