@@ -6,7 +6,7 @@ COPY backend /app
 RUN conda upgrade conda
 RUN conda install -y numpy && \
     conda install -y nb_conda
-RUN conda install -y pytorch torchvision -c pytorch
+RUN conda install -y -c pytorch torchvision
 RUN conda install -y -c anaconda pip
 
 WORKDIR /app
