@@ -58,7 +58,13 @@ def model_predict():
     """Predicts a flower species based on selected model id"""
 
     if request.method == 'POST':
+        #validate the model_id
+        if 'model_id' not in request.form:
+            return Response('Required field model_id not present in request. Refill and retry', status=500)
+
         model_id = request.form.get('model_id')
+
+        #validate the model file
         if 'file' not in request.files:
             return Response('No file uploaded', status=500)
         else :

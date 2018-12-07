@@ -22,6 +22,7 @@ def insert_id(model_id, filename):
 
 
 def get_model_path(model_id):
+	"""This function returns the path of a model based on the model ID"""
 	with open('checkpoints/model_store.json') as f:
 		model_store = json.load(f)
 
