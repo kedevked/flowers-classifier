@@ -28,8 +28,7 @@ export class PredictFlowerComponent implements OnInit {
     this.appService.predict(this.file).subscribe(
       (data: {name: string} ) => {
         this.flowerName = data.name;
-      }
-    );
+      });
   }
 
 }
