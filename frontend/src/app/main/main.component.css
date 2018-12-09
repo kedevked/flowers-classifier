@@ -19,11 +19,3 @@
 .dividerSpan {
     flex: 1 1 auto;
 }
-
-.hiddenInput {
-    display:none;
-}
-
-.accentColor {
-    color: rgb(255, 64, 129);
-}

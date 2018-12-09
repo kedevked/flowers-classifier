@@ -1,0 +1,18 @@
+<mat-card>
+    <mat-card-title>
+      <span *ngIf="!imageSrc">
+        <label for="fileUpload">Upload flower photo</label>
+        <input id="fileUpload" type="file" (change)="onChange($event)" class="hiddenInput" />
+      </span>
+      <span *ngIf="imageSrc">
+        Flower:
+        <span *ngIf="!flowerName" (click)="predict()" class="predictButton">
+          <span class="accentColor">Predict</span>
+        </span>
+        <span *ngIf="flowerName">
+          {{flowerName}}
+        </span>
+      </span>
+    </mat-card-title>
+    <img mat-card-image *ngIf="imageSrc" [src]="imageSrc" />
+  </mat-card>
