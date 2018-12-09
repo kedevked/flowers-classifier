@@ -56,6 +56,34 @@ def load_checkpoint(filepath):
     model.class_to_idx = checkpoint['class_to_idx']
     return model
 
+def load_checkpoint_general(filepath):
+      
+    checkpoint = torch.load(filepath, map_location=lambda storage, loc: storage)
+    arch = checkpoint['arch']
+    if arch == "densenet121":
+        model = models.densenet121(pretrained=True)
+    elif arch =="resnet18":
+        model= models.resnet18(pretrained=True)
+    elif arch == "alexnet":
+        model = models.alexnet(pretrained=True)
+    elif arch =="squeezenet":
+        model = models.squeezenet1_0(pretrained=True)
+    elif arch =="vgg16":
+        model = models.vgg16(pretrained=True)
+    elif arch =="densenet161":
+        model = models.densenet161(pretrained=True)
+    elif arch =="inception":
+        model = models.inception_v3(pretrained=True)  
+
+    else:
+        return False
+    model.classifier = utils.create_sequential_layer(checkpoint['network'])
+    model.load_state_dict(checkpoint['state_dict'])
+    model.class_to_idx = checkpoint['class_to_idx']
+    return model
+
+
+
 loaded_model = load_checkpoint('checkpoint.pth')
 with open('cat_to_name.json', 'r') as f:
     cat_to_name = json.load(f)
@@ -98,6 +126,22 @@ def predict(image_path) :
     print('element', classes[0])
     flowers = get_flowers_name(classes)
     return flowers[0]
+
+def predict3(image_path):
+    #load model 
+    results = []
+    for model_id in utils.get_random_model_ids():
+        print(model_id)
+        filepath = utils.get_model_path(model_id)
+        loaded_model = load_checkpoint_general('checkpoints/'+filepath)
+
+        _, classes = predict_top_classes(image_path,loaded_model)
+        
+        results.append(classes[0])
+
+    return get_flowers_name(list(utils.results_decider(results)))[0]
+
+
 
 def predict_with_model(image_path, model_id):
 

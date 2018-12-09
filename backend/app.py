@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import request
 from flask import Response
-from predict import predict, predict_with_model
+from predict import predict, predict_with_model, predict3
 from flask_cors import CORS, cross_origin
 from flask import jsonify
 from werkzeug import secure_filename
@@ -31,6 +31,21 @@ def predict_flower():
         return Response('Bad request', status=500)
 
 
+@app.route('/predict_new', methods=['POST', 'GET'])
+@cross_origin()
+def predict_flower_new():
+    '''
+        returns a flower prediction
+    '''
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return Response('No file uploaded', status=500)
+        else :
+            return jsonify({"name": predict3(request.files['file'])})
+    else:
+        return Response('Bad request', status=500)
+
+
 @app.route('/upload_model', methods=['POST', 'GET'])
 @cross_origin()
 def upload_model():
@@ -38,6 +53,14 @@ def upload_model():
 
     if request.method =='POST' and 'model' in request.files :
         f = request.files['model']
+
+        valid , response = utils.validate_model(f)
+
+        if valid:  
+            pass
+        else:
+            return jsonify({"message": response})
+    
         sec_file = secure_filename(f.filename)
         
 
