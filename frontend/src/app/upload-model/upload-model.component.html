@@ -1,3 +1,101 @@
-<p>
-  upload-model works!
-</p>
+<mat-horizontal-stepper [linear]="true" #stepper>
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Model architecture</ng-template>
+      <h4>General description</h4>
+      <div>
+        <mat-form-field>
+          <input matInput placeholder="feature extractor name" formControlName="featureExtractorCtrl" required>
+        </mat-form-field>
+      </div>
+
+      <mat-divider></mat-divider>
+      <h4>layers</h4>
+      <div formArrayName="layersCtrl">
+        <div *ngFor="let layercontrol of lCtrl.controls; let i = index; let last = last;" [formGroupName]="i">
+          <div>
+            <mat-form-field>
+              <input matInput placeholder="layer name" formControlName="nameCtrl">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select placeholder="Select" formControlName="operationCtrl">
+                <mat-option value="linear">Linear</mat-option>
+                <mat-option value="relu">ReLU</mat-option>
+                <mat-option value="dropout">Dropout</mat-option>
+                <mat-option value="logsoft">LogSoftmax</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <span *ngIf="layercontrol.value.operationCtrl === 'linear'">
+                <mat-form-field >
+                    <input matInput type="number" placeholder="size input layer" formControlName="inputCtrl">
+                  </mat-form-field>
+                  <mat-form-field>
+                    <input matInput type="number" placeholder="size output layer" formControlName="outputCtrl">
+                  </mat-form-field>
+            </span>
+            <span *ngIf="layercontrol.value.operationCtrl === 'dropout'">
+                <mat-form-field >
+                    <input matInput type="number" placeholder="probability" formControlName="dropoutCtrl">
+                  </mat-form-field>
+            </span>
+
+
+          </div>
+          <button mat-raised-button color="primary" *ngIf="last" (click)="addLayer()">add another layer</button>
+        </div>
+      </div>
+      <button mat-button matStepperNext>Next</button>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel>Fill out your email</ng-template>
+      <mat-form-field>
+        <input matInput type="email" placeholder="email" formControlName="secondCtrl" required>
+      </mat-form-field>
+      <div>
+        <button mat-button mat-raised-button color="primary" matStepperPrevious>Back</button>
+        <button mat-button mat-raised-button color="primary" matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="thirdFormGroup">
+    <form [formGroup]="thirdFormGroup">
+        <ng-template matStepLabel>Upload model</ng-template>
+            <!-- <label for="fileUpload">Upload flower photo</label> -->
+            <input id="fileUpload" type="file" (change)="onChange($event)" class="hiddenInput" />
+            <input type="hidden" name="fileHidden" formControlName="filename"/>
+      <div>
+          <button mat-button mat-raised-button color="primary" matStepperPrevious>Back</button>
+          <button mat-button mat-raised-button color="primary" matStepperNext>Next</button>
+        </div>
+      </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Recap</ng-template>
+    Almost done.
+    <div>
+      <div>Feature extractor: {{firstFormGroup.controls.featureExtractorCtrl.value}}</div>
+      <div *ngFor="let layercontrol of lCtrl.controls; let i = index; let first = first">
+          <mat-divider *ngIf="!first"></mat-divider>
+          <h4>layer {{i}}</h4>
+          <div>name: {{layercontrol.value.nameCtrl}}</div>
+          <div>type: {{layercontrol.value.operationCtrl}}</div>
+          <div *ngIf="layercontrol.value.operationCtrl === 'linear'">
+              <div>in: {{layercontrol.value.inputCtrl}}</div>
+              <div>out: {{layercontrol.value.outputCtrl}}</div>
+          </div>
+
+          <div *ngIf="layercontrol.value.operationCtrl === 'dropout'">
+              <div>drop: {{layercontrol.value.dropoutCtrl}}</div>
+          </div>
+      </div>
+    </div>
+    <button mat-button mat-raised-button color="primary" (click)="uploadModel()">Upload model</button>
+    <div>
+      <button mat-button mat-raised-button color="primary" matStepperPrevious>Back</button>
+      <button mat-button mat-raised-button color="primary" (click)="stepper.reset()">Reset</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>

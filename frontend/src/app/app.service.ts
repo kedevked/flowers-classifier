@@ -15,4 +15,12 @@ export class AppService {
     return this.httpClient.post(`${this.baseUrl}predict`, formData);
   }
 
+  uploadModel(modelArchitecture: { arch: any; layers: any[]; }, file: any): any {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('model', JSON.stringify(modelArchitecture));
+
+    return this.httpClient.post(`${this.baseUrl}upload-model`, formData);
+  }
+
 }
