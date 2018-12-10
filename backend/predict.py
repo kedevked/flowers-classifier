@@ -77,7 +77,7 @@ def load_checkpoint_general(filepath):
 
     else:
         return False
-    model.classifier = utils.create_sequential_layer(checkpoint['network'])
+    model.classifier = utils.create_classifier(checkpoint['network'])
     model.load_state_dict(checkpoint['state_dict'])
     model.class_to_idx = checkpoint['class_to_idx']
     return model
