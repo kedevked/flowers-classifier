@@ -12,7 +12,7 @@
       <mat-divider></mat-divider>
       <h4>layers</h4>
       <div formArrayName="layersCtrl">
-        <div *ngFor="let layercontrol of lCtrl.controls; let i = index; let last = last;" [formGroupName]="i">
+        <div *ngFor="let layercontrol of lCtrl.controls; let i = index; let last = last; let first = first" [formGroupName]="i">
           <div>
             <mat-form-field>
               <input matInput placeholder="layer name" formControlName="nameCtrl" required>
@@ -28,27 +28,27 @@
 
             <span *ngIf="layercontrol.value.operationCtrl === 'linear'">
                 <mat-form-field >
-                    <input matInput type="number" placeholder="size input layer" formControlName="inputCtrl" required>
+                    <input matInput type="number" placeholder="size input layer" formControlName="inputCtrl">
                   </mat-form-field>
                   <mat-form-field>
-                    <input matInput type="number" placeholder="size output layer" formControlName="outputCtrl" required>
+                    <input matInput type="number" placeholder="size output layer" formControlName="outputCtrl">
                   </mat-form-field>
             </span>
             <span *ngIf="layercontrol.value.operationCtrl === 'dropout'">
                 <mat-form-field >
-                    <input matInput type="number" placeholder="probability" formControlName="dropoutCtrl" required>
+                    <input matInput type="number" placeholder="probability" formControlName="dropoutCtrl">
                   </mat-form-field>
             </span>
             <span *ngIf="layercontrol.value.operationCtrl === 'logsoft'">
               <mat-form-field >
-                  <input matInput type="number" placeholder="dimension" formControlName="dimCtrl" required>
+                  <input matInput type="number" placeholder="dimension" formControlName="dimCtrl">
                 </mat-form-field>
           </span>
 
 
           </div>
           <span>
-            <button mat-raised-button color="primary" (click)="removeLayer(i)">Remove layer</button>
+            <button mat-raised-button color="primary" *ngIf=" first !== last" (click)="removeLayer(i)">Remove layer</button>
           </span>
           
           <button mat-raised-button color="primary" *ngIf="last" (click)="addLayer()">Add another layer</button>
@@ -61,7 +61,7 @@
     <form [formGroup]="secondFormGroup">
       <ng-template matStepLabel>Fill out your email</ng-template>
       <mat-form-field>
-        <input matInput type="email" placeholder="email" formControlName="secondCtrl" required>
+        <input matInput type="email" placeholder="email" formControlName="emailCtrl">
       </mat-form-field>
       <div>
         <button mat-button mat-raised-button color="primary" matStepperPrevious>Back</button>
@@ -85,6 +85,8 @@
     <ng-template matStepLabel>Recap</ng-template>
     Almost done.
     <div>
+        <div>Email: {{secondFormGroup.controls.emailCtrl.value || 'no email provided'}}</div>
+
       <div>Feature extractor: {{firstFormGroup.controls.featureExtractorCtrl.value}}</div>
       <div *ngFor="let layercontrol of lCtrl.controls; let i = index; let first = first">
           <mat-divider *ngIf="!first"></mat-divider>

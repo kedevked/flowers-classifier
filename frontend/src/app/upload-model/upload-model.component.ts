@@ -25,7 +25,7 @@ export class UploadModelComponent implements OnInit {
       ])
     });
     this.secondFormGroup = this._formBuilder.group({
-      secondCtrl: ['', Validators.required]
+      emailCtrl: ['']
     });
     this.thirdFormGroup = this._formBuilder.group({
       filename: ['', Validators.required]
