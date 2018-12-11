@@ -5,7 +5,11 @@ import { UploadModelComponent } from './upload-model/upload-model.component';
 
 const routes: Routes = [
   { path: 'predict-flower', component: PredictFlowerComponent},
-  { path: 'upload-model', component: UploadModelComponent}
+  { path: 'upload-model', component: UploadModelComponent},
+  { path: '',
+    redirectTo: '/predict-flower',
+    pathMatch: 'full'
+  },
 ];
 
 @NgModule({
