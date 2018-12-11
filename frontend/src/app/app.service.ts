@@ -18,11 +18,13 @@ export class AppService {
     return this.httpClient.post(`${this.baseUrl}${requestUrl}`, formData);
   }
 
-  uploadModel(modelArchitecture: { arch: any; layers: any[]; }, file: any): any {
+  uploadModel(modelArchitecture: { arch: any; layers: any[]; }, file: any, email ?: string): any {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('model', JSON.stringify(modelArchitecture));
-
+    if (email) {
+      formData.append('email', email);
+    }
     return this.httpClient.post(`${this.baseUrl}upload-model`, formData);
   }
 

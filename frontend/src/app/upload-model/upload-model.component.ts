@@ -87,7 +87,8 @@ export class UploadModelComponent implements OnInit {
       }
       modelArchitecture.layers.push(layer);
     }
-    this.appService.uploadModel(modelArchitecture, this.file).subscribe();
+    const email = this.secondFormGroup.controls.emailCtrl.value;
+    this.appService.uploadModel(modelArchitecture, this.file, email).subscribe();
   }
 
 }
