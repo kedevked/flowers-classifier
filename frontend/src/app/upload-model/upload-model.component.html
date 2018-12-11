@@ -15,10 +15,10 @@
         <div *ngFor="let layercontrol of lCtrl.controls; let i = index; let last = last;" [formGroupName]="i">
           <div>
             <mat-form-field>
-              <input matInput placeholder="layer name" formControlName="nameCtrl">
+              <input matInput placeholder="layer name" formControlName="nameCtrl" required>
             </mat-form-field>
             <mat-form-field>
-              <mat-select placeholder="Select" formControlName="operationCtrl">
+              <mat-select placeholder="Select" formControlName="operationCtrl" required>
                 <mat-option value="linear">Linear</mat-option>
                 <mat-option value="relu">ReLU</mat-option>
                 <mat-option value="dropout">Dropout</mat-option>
@@ -28,21 +28,30 @@
 
             <span *ngIf="layercontrol.value.operationCtrl === 'linear'">
                 <mat-form-field >
-                    <input matInput type="number" placeholder="size input layer" formControlName="inputCtrl">
+                    <input matInput type="number" placeholder="size input layer" formControlName="inputCtrl" required>
                   </mat-form-field>
                   <mat-form-field>
-                    <input matInput type="number" placeholder="size output layer" formControlName="outputCtrl">
+                    <input matInput type="number" placeholder="size output layer" formControlName="outputCtrl" required>
                   </mat-form-field>
             </span>
             <span *ngIf="layercontrol.value.operationCtrl === 'dropout'">
                 <mat-form-field >
-                    <input matInput type="number" placeholder="probability" formControlName="dropoutCtrl">
+                    <input matInput type="number" placeholder="probability" formControlName="dropoutCtrl" required>
                   </mat-form-field>
             </span>
+            <span *ngIf="layercontrol.value.operationCtrl === 'logsoft'">
+              <mat-form-field >
+                  <input matInput type="number" placeholder="dimension" formControlName="dimCtrl" required>
+                </mat-form-field>
+          </span>
 
 
           </div>
-          <button mat-raised-button color="primary" *ngIf="last" (click)="addLayer()">add another layer</button>
+          <span>
+            <button mat-raised-button color="primary" (click)="removeLayer(i)">Remove layer</button>
+          </span>
+          
+          <button mat-raised-button color="primary" *ngIf="last" (click)="addLayer()">Add another layer</button>
         </div>
       </div>
       <button mat-button matStepperNext>Next</button>
@@ -82,6 +91,7 @@
           <h4>layer {{i}}</h4>
           <div>name: {{layercontrol.value.nameCtrl}}</div>
           <div>type: {{layercontrol.value.operationCtrl}}</div>
+          
           <div *ngIf="layercontrol.value.operationCtrl === 'linear'">
               <div>in: {{layercontrol.value.inputCtrl}}</div>
               <div>out: {{layercontrol.value.outputCtrl}}</div>
@@ -90,6 +100,10 @@
           <div *ngIf="layercontrol.value.operationCtrl === 'dropout'">
               <div>drop: {{layercontrol.value.dropoutCtrl}}</div>
           </div>
+
+          <div *ngIf="layercontrol.value.operationCtrl === 'logsoft'">
+            <div>drop: {{layercontrol.value.dimCtrl}}</div>
+        </div>
       </div>
     </div>
     <button mat-button mat-raised-button color="primary" (click)="uploadModel()">Upload model</button>
