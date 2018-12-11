@@ -8,11 +8,11 @@ export class AppService {
   baseUrl = 'http://localhost:5000/';
   constructor(private httpClient: HttpClient) { }
 
-  predict(file, modelId ?: number) {
+  predict(file, modelId ?: string) {
    const formData = new FormData();
    formData.append('file', file);
    if (modelId) {
-     formData.append('id', modelId.toString());
+     formData.append('id', modelId);
    }
    const requestUrl = modelId ? 'model_predict' : 'predict';
     return this.httpClient.post(`${this.baseUrl}${requestUrl}`, formData);
