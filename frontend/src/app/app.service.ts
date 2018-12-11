@@ -14,8 +14,8 @@ export class AppService {
    if (modelId) {
      formData.append('id', modelId.toString());
    }
-
-    return this.httpClient.post(`${this.baseUrl}predict`, formData);
+   const requestUrl = modelId ? 'model_predict' : 'predict';
+    return this.httpClient.post(`${this.baseUrl}${requestUrl}`, formData);
   }
 
   uploadModel(modelArchitecture: { arch: any; layers: any[]; }, file: any): any {
