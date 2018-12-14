@@ -22,7 +22,6 @@ export class MainComponent implements OnInit {
     ) {}
 
 ngOnInit() {
-  this.router.navigate(['/predict-flower']);
 }
 
 }

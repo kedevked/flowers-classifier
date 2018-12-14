@@ -1,18 +1,26 @@
 <mat-card>
-    <mat-card-title>
-      <span *ngIf="!imageSrc">
-        <label for="fileUpload">Upload flower photo</label>
-        <input id="fileUpload" type="file" (change)="onChange($event)" class="hiddenInput" />
+  <mat-card-title>
+    <span *ngIf="!imageSrc">
+      <label for="fileUpload">Upload flower photo</label>
+      <input id="fileUpload" type="file" (change)="onChange($event)" class="hiddenInput" />
+    </span>
+    <span *ngIf="imageSrc">
+      <img mat-card-image *ngIf="imageSrc" [src]="imageSrc" />
+
+      <label><input type="checkbox" [checked]="hasId" (change)="hasId = !hasId" /> Predict with a given model</label>
+      <span *ngIf="hasId">
+        <form>
+          <mat-form-field>
+            <input matInput placeholder="Model Id" name="modelid" [(ngModel)]="modelId">
+          </mat-form-field>
+        </form>
       </span>
-      <span *ngIf="imageSrc">
-        Flower:
-        <span *ngIf="!flowerName" (click)="predict()" class="predictButton">
-          <span class="accentColor">Predict</span>
-        </span>
-        <span *ngIf="flowerName">
-          {{flowerName}}
-        </span>
-      </span>
-    </mat-card-title>
-    <img mat-card-image *ngIf="imageSrc" [src]="imageSrc" />
-  </mat-card>
+      <div>
+        <button mat-raised-button color="primary" (click)="predict(modelId)">Predict</button>
+      </div>
+      <div *ngIf="flowerName">
+        Flower: {{flowerName}}
+      </div>
+    </span>
+  </mat-card-title>
+</mat-card>

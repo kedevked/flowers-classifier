@@ -8,21 +8,23 @@ export class AppService {
   baseUrl = 'http://localhost:5000/';
   constructor(private httpClient: HttpClient) { }
 
-  predict(file, modelId ?: number) {
+  predict(file, modelId ?: string) {
    const formData = new FormData();
    formData.append('file', file);
    if (modelId) {
-     formData.append('id', modelId.toString());
+     formData.append('id', modelId);
    }
-
-    return this.httpClient.post(`${this.baseUrl}predict`, formData);
+   const requestUrl = modelId ? 'model_predict' : 'predict';
+    return this.httpClient.post(`${this.baseUrl}${requestUrl}`, formData);
   }
 
-  uploadModel(modelArchitecture: { arch: any; layers: any[]; }, file: any): any {
+  uploadModel(modelArchitecture: { arch: any; layers: any[]; }, file: any, email ?: string): any {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('model', JSON.stringify(modelArchitecture));
-
+    if (email) {
+      formData.append('email', email);
+    }
     return this.httpClient.post(`${this.baseUrl}upload-model`, formData);
   }
 

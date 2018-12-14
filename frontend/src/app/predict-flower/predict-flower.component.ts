@@ -11,7 +11,7 @@ export class PredictFlowerComponent implements OnInit {
   imageSrc: string;
   file: any;
   flowerName: string;
-
+  modelId: string;
   constructor(private appService: AppService) { }
 
   ngOnInit() {
@@ -24,8 +24,9 @@ export class PredictFlowerComponent implements OnInit {
     reader.readAsDataURL(this.file);
   }
 
-  predict() {
-    this.appService.predict(this.file).subscribe(
+  predict(modelId) {
+    console.log(modelId);
+    this.appService.predict(this.file, modelId).subscribe(
       (data: {name: string} ) => {
         this.flowerName = data.name;
       });

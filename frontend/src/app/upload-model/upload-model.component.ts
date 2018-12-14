@@ -25,7 +25,7 @@ export class UploadModelComponent implements OnInit {
       ])
     });
     this.secondFormGroup = this._formBuilder.group({
-      secondCtrl: ['', Validators.required]
+      emailCtrl: ['']
     });
     this.thirdFormGroup = this._formBuilder.group({
       filename: ['', Validators.required]
@@ -34,16 +34,21 @@ export class UploadModelComponent implements OnInit {
 
   buildLayerCtrl() {
     return this._formBuilder.group({
-      nameCtrl: new FormControl(null),
-      operationCtrl: new FormControl(null),
+      nameCtrl: new FormControl('', Validators.required),
+      operationCtrl: new FormControl('', Validators.required),
       inputCtrl: new FormControl(null),
       outputCtrl: new FormControl(null),
-      dropoutCtrl: new FormControl(null)
+      dropoutCtrl: new FormControl(null),
+      dimCtrl: new FormControl(1)
     });
   }
 
   addLayer() {
     (this.firstFormGroup.controls.layersCtrl as FormArray).push(this.buildLayerCtrl());
+  }
+
+  removeLayer(index: number) {
+    (this.firstFormGroup.controls.layersCtrl as FormArray).removeAt(index);
   }
 
   get lCtrl(): FormArray {
@@ -68,17 +73,22 @@ export class UploadModelComponent implements OnInit {
         name: layercontrol.value.nameCtrl,
         type: layercontrol.value.operationCtrl
       };
-      if (layer.type === 'linear') {
-        layer['in'] = layercontrol.value.inputCtrl;
-        layer['out'] = layercontrol.value.outputCtrl;
-      }
-      if (layer.type === 'dropout') {
-        layer['drop'] = layercontrol.value.dropoutCtrl;
+      switch (layer.type) {
+        case 'linear':
+          layer['in'] = layercontrol.value.inputCtrl;
+          layer['out'] = layercontrol.value.outputCtrl;
+          break;
+        case 'dropout':
+          layer['drop'] = layercontrol.value.dropoutCtrl;
+          break;
+        case 'logsoft':
+          layer['drop'] = layercontrol.value.dimCtrl;
+          break;
       }
       modelArchitecture.layers.push(layer);
     }
-    this.appService.uploadModel(modelArchitecture, this.file).subscribe();
+    const email = this.secondFormGroup.controls.emailCtrl.value;
+    this.appService.uploadModel(modelArchitecture, this.file, email).subscribe();
   }
-
 
 }
