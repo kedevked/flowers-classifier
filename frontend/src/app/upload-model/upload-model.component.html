@@ -5,7 +5,15 @@
       <h4>General description</h4>
       <div>
         <mat-form-field>
-          <input matInput placeholder="feature extractor name" formControlName="featureExtractorCtrl" required>
+          <mat-select placeholder="Select" formControlName="featureExtractorCtrl" required>
+            <mat-option value="Densenet121">Densenet121</mat-option>
+            <mat-option value="densenet">Densenet</mat-option>
+            <mat-option value="resnet18 ">Resnet18</mat-option>
+            <mat-option value="alexnet">Alexnet</mat-option>
+            <mat-option value="squeezenet">Squeezenet</mat-option>
+            <mat-option value="vgg16">Vgg16</mat-option>
+            <mat-option value="inception">Inception</mat-option>
+          </mat-select>
         </mat-form-field>
       </div>
 
