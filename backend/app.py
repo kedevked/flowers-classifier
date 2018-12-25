@@ -8,6 +8,8 @@ from werkzeug import secure_filename
 import os
 from numpy.random import randint
 import utils
+import json
+import torch
 
 
 
@@ -53,23 +55,28 @@ def upload_model():
 
     if request.method =='POST' and 'model' in request.files :
         f = request.files['model']
+        print(type(f))
+        #valid , response = utils.validate_model(f)
 
-        valid , response = utils.validate_model(f)
+        if "network" in request.form.keys():  
+            network = json.loads(request.form['network'])
+            new_checkpoint=utils.insert_params(network, f)
 
-        if valid:  
-            pass
         else:
-            return jsonify({"message": response})
+            return jsonify({"message": "network param not present in request. Fill and resubmit"})
     
-        sec_file = secure_filename(f.filename)
-        
+        sec_file = secure_filename(f.filename)        
 
         # generate random id: TOD0: write a function that checks for conflict
         model_id = ''.join(str(e) for e in list(randint(0, 9, 20)))
 
+        
+        #f.save(os.path.join('checkpoints', sec_file))
+        filename = os.path.join('checkpoints', sec_file) #+ "_" + model_id
+        filename = filename.split('.')[0] + "_" + model_id + ".pth"
+        torch.save(new_checkpoint, filename)
         # insert into model store
         utils.insert_id(model_id,sec_file)
-        f.save(os.path.join('checkpoints', sec_file))
         return jsonify({"status": "saved" , "id":model_id})
     else:
         return Response('Bad request', status=500)
@@ -95,6 +102,13 @@ def model_predict():
             return jsonify({"name": pred})
     else:
         return Response('Bad request', status=500)
+
+
+@app.route('/send_mail', methods=['POST', 'GET'])
+@cross_origin()
+def send_mail():
+    pass
+
 
 if __name__ == "__main__":
     app.run("0.0.0.0", port=5000, debug=True)

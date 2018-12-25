@@ -9,6 +9,8 @@ from collections import OrderedDict
 
 
 def create_sequential_layer(network):
+
+	"""Parser for creating sequential layers for the model(Depreciated)"""
 	net = []
 
 	for layer, contents in network.items():
@@ -62,6 +64,39 @@ def create_sequential_layer(network):
 				net.append((name, nn.LogSoftmax(dim=dim)))
 
 	return nn.Sequential(OrderedDict(net))
+
+
+def create_classifer(network):
+	"""Parser for creating sequential layers for the model"""
+
+	net = []
+
+	for layer in network:
+		type = layer['type']
+		contents = layer
+		if type == "linear":
+			name = contents['name']
+			insize= contents['in']
+			outsize = contents['out']
+			net.append((name, nn.Linear(insize, outsize)))
+
+		elif type =="relu":
+			name = contents['name']
+			net.append((name,nn.ReLU()))
+
+		elif type == "dropout":
+			name = contents['name']
+			drop = contents['drop']
+			net.append((name,nn.Dropout(float(drop))))
+
+		elif type == "logsoft":
+			name = contents['name']
+			dim = int(contents['dim'])
+			if type == 'logsoft':
+				net.append((name, nn.LogSoftmax(dim=dim)))
+
+	return nn.Sequential(OrderedDict(net))
+
 
 
 
@@ -131,14 +166,19 @@ if __name__ == '__main__':
 	#print(results_decider(['1','3','4','4']))
 	#print(get_random_model_ids())
 
-	data = {"input":{"name":"fc1", "type":"linear","in":1024, "out":100, "act":"relu",
-			 "drop":0.2, "actname":"relu1", "dropname":"drop1"},
-			"1":{"name":"fc2", "type":"linear","in":1024, "out":100, "act":"relu", "drop":0.2, "actname":"relu2", "dropname":"drop2"},
-			"1":{"name":"fc3", "type":"linear","in":1024, "out":100},
-		"output":{"name":"output", "type":"logsoft","dim":1}
+	# data = {"input":{"name":"fc1", "type":"linear","in":1024, "out":100, "act":"relu",
+	# 		 "drop":0.2, "actname":"relu1", "dropname":"drop1"},
+	# 		"1":{"name":"fc2", "type":"linear","in":1024, "out":100, "act":"relu", "drop":0.2, "actname":"relu2", "dropname":"drop2"},
+	# 		"1":{"name":"fc3", "type":"linear","in":1024, "out":100},
+	# 	"output":{"name":"output", "type":"logsoft","dim":1}
 
-	}
+	# }
 
+	data = [{"name":"fc1", "type":"linear", "in":1024, "out": 300},
+			{"name":"relu1", "type":"relu"}, {"name":"drop1", "type":"dropout", "drop":0.2 },
+			{"name":"fc2", "type":"linear", "in":300, "out": 102}, 
+			{"name":'output', "type": "logsoft", "dim":1}]
 	checkpoint = {"arch":"densenet121", "network": data, "state_dict":[], "class_to_idx":[] }
-	torch.save(checkpoint, 'test.pth')
+	#torch.save(checkpoint, 'test.pth')
 	#print(create_sequential_layer(data))
+	print(create_classifer(data))
