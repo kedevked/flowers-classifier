@@ -5,7 +5,7 @@ from collections import Counter
 from torch import nn
 import torch
 from collections import OrderedDict
-
+from flask_mail import Message
 
 
 def create_sequential_layer(network):
@@ -162,6 +162,28 @@ def validate_model(model):
 			return False, key + " not found, please make sure your model contains this field"
 	return True, "Valid model"
 
+
+def insert_params(network, model):
+	checkpoint = torch.load(model, map_location=lambda storage, loc: storage)
+
+	checkpoint['network'] = network['layers']
+	checkpoint['arch'] = network['arch']
+
+	return checkpoint
+
+
+
+def send_email(mail, message, subject, sender, recipient):
+    msg = mail.send_message(body=message,
+              subject=subject,
+              sender=sender,
+              recipients=[recipient])
+
+    #	mail.send(msg)
+
+    return "Msg sent successfully"
+
+
 if __name__ == '__main__':
 	#print(results_decider(['1','3','4','4']))
 	#print(get_random_model_ids())
@@ -181,4 +203,12 @@ if __name__ == '__main__':
 	checkpoint = {"arch":"densenet121", "network": data, "state_dict":[], "class_to_idx":[] }
 	#torch.save(checkpoint, 'test.pth')
 	#print(create_sequential_layer(data))
-	print(create_classifer(data))
+	#print(create_classifer(data))
+
+	#insert arch
+
+	checkpoint = torch.load('checkpoints/checkpoint_1_81241662617885720627.pth', map_location=lambda storage, loc: storage)
+
+	checkpoint['arch'] = 'densenet121'
+
+	

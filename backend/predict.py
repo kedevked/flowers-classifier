@@ -56,6 +56,23 @@ def load_checkpoint(filepath):
     model.class_to_idx = checkpoint['class_to_idx']
     return model
 
+
+def load_checkpoint_test(filepath):
+    
+    model = models.densenet121(pretrained=True)
+    
+    classifier = nn.Sequential(OrderedDict([
+                      ('fc1', nn.Linear(1024, 500)),
+                      ('relu1', nn.ReLU()),
+                      ('fc2', nn.Linear(500, 102)),
+                      ('output', nn.LogSoftmax(dim=1))]))
+    model.classifier = classifier
+    checkpoint = torch.load(filepath, map_location=lambda storage, loc: storage)
+    model.load_state_dict(checkpoint['state_dict'])
+    model.class_to_idx = checkpoint['class_to_idx']
+    return model
+
+
 def load_checkpoint_general(filepath):
       
     checkpoint = torch.load(filepath, map_location=lambda storage, loc: storage)
@@ -84,7 +101,7 @@ def load_checkpoint_general(filepath):
 
 
 
-loaded_model = load_checkpoint('checkpoint.pth')
+loaded_model = load_checkpoint_test('checkpoints/checkpoint_1_81241662617885720627.pth')
 with open('cat_to_name.json', 'r') as f:
     cat_to_name = json.load(f)
 
@@ -115,7 +132,7 @@ def process_image(image):
     image = image.crop((left, top, right, bottom))
     
     # im.crop(8, 8, 248, 248)
-    np_image = np.array(image)
+    np_image = np.array(image)/255
     np_norm =  ( np_image - np.array([0.485, 0.456, 0.406]) ) / np.array([0.229, 0.224, 0.225])
     return np_norm.transpose((-1, 0, 1))
 

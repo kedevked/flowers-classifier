@@ -10,12 +10,23 @@ from numpy.random import randint
 import utils
 import json
 import torch
+from flask_mail import Mail
 
 
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
 os.makedirs('checkpoints', exist_ok=True)
+app.config.update(
+    MAIL_SERVER='smtp.googlemail.com',
+    MAIL_PORT=465,
+    MAIL_USE_TLS = False,
+    MAIL_USE_SSL=True,
+    MAIL_USERNAME = '',
+    MAIL_PASSWORD = ''
+)
+
+mail = Mail(app)
 
 
 @app.route('/predict', methods=['POST', 'GET'])
@@ -48,22 +59,22 @@ def predict_flower_new():
         return Response('Bad request', status=500)
 
 
-@app.route('/upload_model', methods=['POST', 'GET'])
+@app.route('/upload-model', methods=['POST', 'GET'])
 @cross_origin()
 def upload_model():
     """Stores a checkpoint or saved model and returns a unique ID"""
 
-    if request.method =='POST' and 'model' in request.files :
-        f = request.files['model']
+    if request.method =='POST' and 'file' in request.files :
+        f = request.files['file']
         print(type(f))
         #valid , response = utils.validate_model(f)
 
-        if "network" in request.form.keys():  
-            network = json.loads(request.form['network'])
+        if "model" in request.form.keys():  
+            network = json.loads(request.form['model'])
             new_checkpoint=utils.insert_params(network, f)
 
         else:
-            return jsonify({"message": "network param not present in request. Fill and resubmit"})
+            return jsonify({"message": "model param not present in request. Fill and resubmit"})
     
         sec_file = secure_filename(f.filename)        
 
@@ -76,7 +87,21 @@ def upload_model():
         filename = filename.split('.')[0] + "_" + model_id + ".pth"
         torch.save(new_checkpoint, filename)
         # insert into model store
-        utils.insert_id(model_id,sec_file)
+        utils.insert_id(model_id,filename.split('/')[-1])
+
+        # send email if present
+
+        # if "email" in request.form.keys():
+        #     recipient = request.form["email"]
+
+        #     subject = "MODEL ID CONFIRMATION"
+        #     sender = ''
+        #     body = 'Your model has been successfully uploaded and saved. Your MODEL ID is: ' + model_id 
+        #     body+='Please use this ID if you want to make predictions based on this model'
+
+        #     res=utils.send_email(mail, body, subject, sender, recipient)
+        #     pritn(res)
+
         return jsonify({"status": "saved" , "id":model_id})
     else:
         return Response('Bad request', status=500)
@@ -107,7 +132,26 @@ def model_predict():
 @app.route('/send_mail', methods=['POST', 'GET'])
 @cross_origin()
 def send_mail():
-    pass
+
+    valid_params = ['subject', 'message', 'sender', 'recipient']
+
+    for i in valid_params:
+        if i not in request.form.keys():
+            return Response(i + "not present in the request fields. Refill and submit", status=400)
+
+    subject = request.form['subject']
+    message = request.form['message']
+    sender = request. form['sender']
+    recipient = request.form['recipient']
+
+    msg = Message(message,
+                  subject=subject,
+                  sender=sender,
+                  recipients=[recipient])
+
+    mail.send(msg)
+
+    return Response("Msg sent successfully")
 
 
 if __name__ == "__main__":
