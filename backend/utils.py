@@ -12,7 +12,6 @@ def create_sequential_layer(network):
 
 	"""Parser for creating sequential layers for the model(Depreciated)"""
 	net = []
-
 	for layer, contents in network.items():
 		if layer =='input':
 			name = contents['name']
@@ -70,7 +69,7 @@ def create_classifer(network):
 	"""Parser for creating sequential layers for the model"""
 
 	net = []
-
+	#print(network)
 	for layer in network:
 		type = layer['type']
 		contents = layer
@@ -91,7 +90,7 @@ def create_classifer(network):
 
 		elif type == "logsoft":
 			name = contents['name']
-			dim = int(contents['dim'])
+			dim = int(contents['drop'])
 			if type == 'logsoft':
 				net.append((name, nn.LogSoftmax(dim=dim)))
 

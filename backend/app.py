@@ -22,14 +22,14 @@ app.config.update(
     MAIL_PORT=465,
     MAIL_USE_TLS = False,
     MAIL_USE_SSL=True,
-    MAIL_USERNAME = '',
-    MAIL_PASSWORD = ''
+    MAIL_USERNAME = 'appclassifier@gmail.com',
+    MAIL_PASSWORD = 'appclassifier123'
 )
 
 mail = Mail(app)
 
 
-@app.route('/predict', methods=['POST', 'GET'])
+@app.route('/predict_new', methods=['POST', 'GET'])
 @cross_origin()
 def predict_flower():
     '''
@@ -44,7 +44,7 @@ def predict_flower():
         return Response('Bad request', status=500)
 
 
-@app.route('/predict_new', methods=['POST', 'GET'])
+@app.route('/predict', methods=['POST', 'GET'])
 @cross_origin()
 def predict_flower_new():
     '''
@@ -91,16 +91,16 @@ def upload_model():
 
         # send email if present
 
-        # if "email" in request.form.keys():
-        #     recipient = request.form["email"]
+        if "email" in request.form.keys():
+            recipient = request.form["email"]
 
-        #     subject = "MODEL ID CONFIRMATION"
-        #     sender = ''
-        #     body = 'Your model has been successfully uploaded and saved. Your MODEL ID is: ' + model_id 
-        #     body+='Please use this ID if you want to make predictions based on this model'
+            subject = "MODEL ID CONFIRMATION"
+            sender = 'appclassifier@gmail.com'
+            body = 'Your model has been successfully uploaded and saved. Your MODEL ID is: ' + model_id 
+            body+=' Please use this ID if you want to make predictions based on this model'
 
-        #     res=utils.send_email(mail, body, subject, sender, recipient)
-        #     pritn(res)
+            res=utils.send_email(mail, body, subject, sender, recipient)
+            print(res)
 
         return jsonify({"status": "saved" , "id":model_id})
     else:

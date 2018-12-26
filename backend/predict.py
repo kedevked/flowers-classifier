@@ -77,6 +77,8 @@ def load_checkpoint_general(filepath):
       
     checkpoint = torch.load(filepath, map_location=lambda storage, loc: storage)
     arch = checkpoint['arch']
+    arch = arch.lower()
+    #print(arch)
     if arch == "densenet121":
         model = models.densenet121(pretrained=True)
     elif arch =="resnet18":
@@ -94,14 +96,14 @@ def load_checkpoint_general(filepath):
 
     else:
         return False
-    model.classifier = utils.create_classifier(checkpoint['network'])
+    model.classifier = utils.create_classifer(checkpoint['network'])
     model.load_state_dict(checkpoint['state_dict'])
     model.class_to_idx = checkpoint['class_to_idx']
     return model
 
 
 
-loaded_model = load_checkpoint_test('checkpoints/checkpoint_1_81241662617885720627.pth')
+loaded_model = load_checkpoint_test('checkpoints/checkpoint_1_34078121870140268755.pth')
 with open('cat_to_name.json', 'r') as f:
     cat_to_name = json.load(f)
 
@@ -155,7 +157,7 @@ def predict3(image_path):
         _, classes = predict_top_classes(image_path,loaded_model)
         
         results.append(classes[0])
-
+    print(results)
     return get_flowers_name(list(utils.results_decider(results)))[0]
 
 
