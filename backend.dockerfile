@@ -16,6 +16,8 @@ RUN pip install matplotlib
 RUN pip install flask_cors
 RUN pip install argparse
 RUN pip install Pillow
+RUN pip install werkzeug
+RUN pip install flask_mail
 
 ENTRYPOINT ["python"]
 
