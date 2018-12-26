@@ -8,6 +8,35 @@ from collections import OrderedDict
 from flask_mail import Message
 
 
+def load_checkpoint_model(checkpoint):
+      
+    arch = checkpoint['arch']
+    arch = arch.lower()
+    print(arch)
+    if arch == "densenet121":
+        model = models.densenet121(pretrained=True)
+    elif arch =="resnet18":
+        model= models.resnet18(pretrained=True)
+    elif arch == "alexnet":
+        model = models.alexnet(pretrained=True)
+    elif arch =="squeezenet":
+        model = models.squeezenet1_0(pretrained=True)
+    elif arch =="vgg16":
+        model = models.vgg16(pretrained=True)
+    elif arch =="densenet161":
+        model = models.densenet161(pretrained=True)
+    elif arch =="inception":
+        model = models.inception_v3(pretrained=True)  
+
+    else:
+        return False
+    model.classifier = utils.create_classifer(checkpoint['network'])
+    model.load_state_dict(checkpoint['state_dict'])
+    model.class_to_idx = checkpoint['class_to_idx']
+    return model
+
+ 
+
 def create_sequential_layer(network):
 
 	"""Parser for creating sequential layers for the model(Depreciated)"""
@@ -181,6 +210,22 @@ def send_email(mail, message, subject, sender, recipient):
     #	mail.send(msg)
 
     return "Msg sent successfully"
+
+
+
+def model_testing(model):
+	try:
+		loaded_model = load_checkpoint_model(model)
+		print(loaded_model)
+		if loaded_model:
+			return True
+		else:
+			return False
+	except Exception as e:
+		return False
+	
+
+
 
 
 if __name__ == '__main__':

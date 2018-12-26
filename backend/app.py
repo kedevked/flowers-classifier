@@ -73,6 +73,13 @@ def upload_model():
             network = json.loads(request.form['model'])
             new_checkpoint=utils.insert_params(network, f)
 
+            # check if model works
+
+            valid = utils.model_testing(new_checkpoint)
+            #print(valid)
+            if valid == False:
+                return jsonify({"message": "Your model is inconsistent with the description. Verify and retry"})
+
         else:
             return jsonify({"message": "model param not present in request. Fill and resubmit"})
     
@@ -114,18 +121,22 @@ def model_predict():
 
     if request.method == 'POST':
         #validate the model_id
-        if 'model_id' not in request.form:
+
+        if 'id' not in request.form:
             return Response('Required field model_id not present in request. Refill and retry', status=500)
 
-        model_id = request.form.get('model_id')
-
+        model_id = request.form.get('id')
+        #print(model_id)
         #validate the model file
         if 'file' not in request.files:
+            print('no file')
             return Response('No file uploaded', status=500)
         else :
             pred = predict_with_model(request.files['file'], model_id)
+            print(pred)
             return jsonify({"name": pred})
     else:
+        print('in else')
         return Response('Bad request', status=500)
 
 

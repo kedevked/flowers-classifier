@@ -103,6 +103,8 @@ def load_checkpoint_general(filepath):
 
 
 
+
+
 loaded_model = load_checkpoint_test('checkpoints/checkpoint_1_34078121870140268755.pth')
 with open('cat_to_name.json', 'r') as f:
     cat_to_name = json.load(f)
@@ -166,13 +168,20 @@ def predict_with_model(image_path, model_id):
 
     #load model 
     filepath = utils.get_model_path(model_id)
-    loaded_model = load_checkpoint('checkpoints/'+filepath)
+    loaded_model = load_checkpoint_general('checkpoints/'+filepath)
 
     _, classes = predict_top_classes(image_path,loaded_model)
     print('classes', classes)
     print('element', classes[0])
     flowers = get_flowers_name(classes)
     return flowers[0]
+
+def predict_testing_model(image_path, model):
+    _, classes = predict_top_classes(image_path,model)
+    print('classes', classes)
+    print('element', classes[0])
+    flowers = get_flowers_name(classes)
+    return flowers[0]   
 
     
 def predict_top_classes(image_path, model=loaded_model, topk=1):
