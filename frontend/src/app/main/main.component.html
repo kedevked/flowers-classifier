@@ -6,11 +6,11 @@
     <span class="dividerSpan"></span>
     <button mat-fab [matMenuTriggerFor]="menu">Actions</button>
     <mat-menu #menu="matMenu">
-      <div>
-          <a routerLink="predict-flower" routerLinkActive="active">Predict flower</a>
+      <div class="menuItem">
+          <a routerLink="predict-flower" routerLinkActive="active" class="menuLink">Predict flower</a>
       </div>
-      <div>
-          <a routerLink="upload-model" routerLinkActive="active">Upload model</a>
+      <div class="menuItem">
+          <a routerLink="upload-model" routerLinkActive="active" class="menuLink">Upload model</a>
       </div>
     </mat-menu>
   </mat-toolbar>

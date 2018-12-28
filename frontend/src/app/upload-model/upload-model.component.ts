@@ -57,6 +57,7 @@ export class UploadModelComponent implements OnInit {
 
   onChange(event) {
     this.file = event.target.files[0];
+    console.log(this.file);
     this.thirdFormGroup.controls['filename'].setValue(this.file ? this.file.name : '');
     const reader = new FileReader();
     reader.onload = e => this.imageSrc = reader.result as string;

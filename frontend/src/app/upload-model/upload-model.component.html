@@ -1,4 +1,4 @@
-<mat-horizontal-stepper [linear]="true" #stepper>
+<mat-vertical-stepper [linear]="true" #stepper>
   <mat-step [stepControl]="firstFormGroup">
     <form [formGroup]="firstFormGroup">
       <ng-template matStepLabel>Model architecture</ng-template>
@@ -18,9 +18,10 @@
       </div>
 
       <mat-divider></mat-divider>
-      <h4>layers</h4>
+      <h4>Layers</h4>
       <div formArrayName="layersCtrl">
-        <div *ngFor="let layercontrol of lCtrl.controls; let i = index; let last = last; let first = first" [formGroupName]="i">
+        <div *ngFor="let layercontrol of lCtrl.controls; let i = index; let last = last; let first = first"
+          [formGroupName]="i">
           <div>
             <mat-form-field>
               <input matInput placeholder="layer name" formControlName="nameCtrl" required>
@@ -33,36 +34,32 @@
                 <mat-option value="logsoft">LogSoftmax</mat-option>
               </mat-select>
             </mat-form-field>
-
             <span *ngIf="layercontrol.value.operationCtrl === 'linear'">
-                <mat-form-field >
-                    <input matInput type="number" placeholder="size input layer" formControlName="inputCtrl">
-                  </mat-form-field>
-                  <mat-form-field>
-                    <input matInput type="number" placeholder="size output layer" formControlName="outputCtrl">
-                  </mat-form-field>
+              <mat-form-field>
+                <input matInput type="number" placeholder="size input layer" formControlName="inputCtrl">
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput type="number" placeholder="size output layer" formControlName="outputCtrl">
+              </mat-form-field>
             </span>
             <span *ngIf="layercontrol.value.operationCtrl === 'dropout'">
-                <mat-form-field >
-                    <input matInput type="number" placeholder="probability" formControlName="dropoutCtrl">
-                  </mat-form-field>
+              <mat-form-field>
+                <input matInput type="number" placeholder="probability" formControlName="dropoutCtrl">
+              </mat-form-field>
             </span>
             <span *ngIf="layercontrol.value.operationCtrl === 'logsoft'">
-              <mat-form-field >
-                  <input matInput type="number" placeholder="dimension" formControlName="dimCtrl">
-                </mat-form-field>
-          </span>
-
-
+              <mat-form-field>
+                <input matInput type="number" placeholder="dimension" formControlName="dimCtrl">
+              </mat-form-field>
+            </span>
           </div>
-          <span>
-            <button mat-raised-button color="primary" *ngIf=" first !== last" (click)="removeLayer(i)">Remove layer</button>
-          </span>
-          
-          <button mat-raised-button color="primary" *ngIf="last" (click)="addLayer()">Add another layer</button>
+          <button mat-stroked-button *ngIf=" first !== last" (click)="removeLayer(i)">Remove layer</button>
+          <button mat-stroked-button *ngIf="last" (click)="addLayer()">Add layer</button>
         </div>
       </div>
-      <button mat-button matStepperNext>Next</button>
+      <div class="navigButton">
+        <button mat-mini-fab matStepperNext>>></button>
+      </div>
     </form>
   </mat-step>
   <mat-step [stepControl]="secondFormGroup">
@@ -71,55 +68,58 @@
       <mat-form-field>
         <input matInput type="email" placeholder="email" formControlName="emailCtrl">
       </mat-form-field>
-      <div>
-        <button mat-button mat-raised-button color="primary" matStepperPrevious>Back</button>
-        <button mat-button mat-raised-button color="primary" matStepperNext>Next</button>
+      <div class="navigButton">
+        <button mat-mini-fab color="primary" matStepperPrevious><<</button>
+        <button mat-mini-fab matStepperNext>>></button>
       </div>
     </form>
   </mat-step>
   <mat-step [stepControl]="thirdFormGroup">
     <form [formGroup]="thirdFormGroup">
-        <ng-template matStepLabel>Upload model</ng-template>
-            <!-- <label for="fileUpload">Upload flower photo</label> -->
-            <input id="fileUpload" type="file" (change)="onChange($event)" class="hiddenInput" />
-            <input type="hidden" name="fileHidden" formControlName="filename"/>
-      <div>
-          <button mat-button mat-raised-button color="primary" matStepperPrevious>Back</button>
-          <button mat-button mat-raised-button color="primary" matStepperNext>Next</button>
-        </div>
-      </form>
+      <ng-template matStepLabel>Upload model</ng-template>
+      <button mat-stroked-button><label for="fileUpload">Upload model checkpoint</label></button>
+      <input id="fileUpload" type="file" (change)="onChange($event)" class="hiddenInput" />
+      <div *ngIf="file" class="navigButton">Uploaded: {{file.name}}</div>
+      <div class="navigButton">
+        <button mat-mini-fab color="primary" matStepperPrevious><<</button>
+        <button mat-mini-fab matStepperNext>>></button>
+      </div>
+    </form>
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Recap</ng-template>
     Almost done.
     <div>
-        <div>Email: {{secondFormGroup.controls.emailCtrl.value || 'no email provided'}}</div>
+      <div>Email: {{secondFormGroup.controls.emailCtrl.value || 'no email provided'}}</div>
 
       <div>Feature extractor: {{firstFormGroup.controls.featureExtractorCtrl.value}}</div>
       <div *ngFor="let layercontrol of lCtrl.controls; let i = index; let first = first">
-          <mat-divider *ngIf="!first"></mat-divider>
-          <h4>layer {{i}}</h4>
-          <div>name: {{layercontrol.value.nameCtrl}}</div>
-          <div>type: {{layercontrol.value.operationCtrl}}</div>
-          
-          <div *ngIf="layercontrol.value.operationCtrl === 'linear'">
-              <div>in: {{layercontrol.value.inputCtrl}}</div>
-              <div>out: {{layercontrol.value.outputCtrl}}</div>
-          </div>
+        <mat-divider *ngIf="!first"></mat-divider>
+        <h4>Layer {{i}}</h4>
+        <div>Name: {{layercontrol.value.nameCtrl}}</div>
+        <div>Type: {{layercontrol.value.operationCtrl}}</div>
 
-          <div *ngIf="layercontrol.value.operationCtrl === 'dropout'">
-              <div>drop: {{layercontrol.value.dropoutCtrl}}</div>
-          </div>
+        <div *ngIf="layercontrol.value.operationCtrl === 'linear'">
+          <div>In: {{layercontrol.value.inputCtrl}}</div>
+          <div>Out: {{layercontrol.value.outputCtrl}}</div>
+        </div>
 
-          <div *ngIf="layercontrol.value.operationCtrl === 'logsoft'">
-            <div>drop: {{layercontrol.value.dimCtrl}}</div>
+        <div *ngIf="layercontrol.value.operationCtrl === 'dropout'">
+          <div>Drop: {{layercontrol.value.dropoutCtrl}}</div>
+        </div>
+
+        <div *ngIf="layercontrol.value.operationCtrl === 'logsoft'">
+          <div>Drop: {{layercontrol.value.dimCtrl}}</div>
         </div>
       </div>
     </div>
-    <button mat-button mat-raised-button color="primary" (click)="uploadModel()">Upload model</button>
-    <div>
-      <button mat-button mat-raised-button color="primary" matStepperPrevious>Back</button>
-      <button mat-button mat-raised-button color="primary" (click)="stepper.reset()">Reset</button>
+    <div class="navigButton">
+      <button mat-stroked-button (click)="stepper.reset()">Reset</button> 
+    </div>
+    <div class="navigButton">
+      <button mat-mini-fab color="primary" matStepperPrevious><<</button>
+      <button mat-mini-fab (click)="uploadModel()">>></button>
+
     </div>
   </mat-step>
-</mat-horizontal-stepper>
+</mat-vertical-stepper>

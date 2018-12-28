@@ -6,8 +6,9 @@
     </span>
     <span *ngIf="imageSrc">
       <img mat-card-image *ngIf="imageSrc" [src]="imageSrc" />
-
-      <label><input type="checkbox" [checked]="hasId" (change)="hasId = !hasId" /> Predict with a given model</label>
+      <div class="checkboxField">
+        <label><mat-checkbox [checked]="hasId" (change)="hasId = !hasId">Use given model</mat-checkbox></label>
+      </div>
       <span *ngIf="hasId">
         <form>
           <mat-form-field>

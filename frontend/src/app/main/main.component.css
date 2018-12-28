@@ -19,3 +19,12 @@
 .dividerSpan {
     flex: 1 1 auto;
 }
+
+.menuItem {
+    margin: 10px;
+}
+
+.menuLink {
+    color: black;
+    text-decoration: none;
+}

@@ -5,7 +5,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from '@angular/cdk/layout';
-import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule, MatStepperModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatDividerModule } from '@angular/material';
+import { MatToolbarModule, MatButtonModule,
+         MatSidenavModule, MatIconModule, MatListModule, MatStepperModule, MatFormFieldModule, MatInputModule,
+         MatSelectModule, MatDividerModule } from '@angular/material';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { AppService } from './app.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { MainComponent } from './main/main.component';
@@ -41,7 +44,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatStepperModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatDividerModule
+    MatDividerModule,
+    MatCheckboxModule
   ],
   providers: [
     AppService

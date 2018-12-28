@@ -5,3 +5,7 @@
 .accentColor {
     color: rgb(255, 64, 129);
 }
+
+.checkboxField {
+    margin: 15px 0;
+}
