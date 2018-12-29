@@ -358,6 +358,8 @@ THE SOFTWARE.
 
 @angular/material/form-field
 
+@angular/material/checkbox
+
 @angular/material/button
 
 @angular/material/card
