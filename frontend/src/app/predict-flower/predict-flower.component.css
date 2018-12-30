@@ -9,3 +9,11 @@
 .checkboxField {
     margin: 15px 0;
 }
+
+@media screen and (min-width: 400px) {
+    .responsiveSize {
+        width: 300px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
