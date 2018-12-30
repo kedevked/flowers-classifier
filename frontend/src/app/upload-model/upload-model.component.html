@@ -53,7 +53,7 @@
               </mat-form-field>
             </span>
           </div>
-          <button mat-stroked-button *ngIf=" first !== last" (click)="removeLayer(i)">Remove layer</button>
+          <button mat-stroked-button *ngIf="!first || first != last " (click)="removeLayer(i)">Remove layer</button>
           <button mat-stroked-button *ngIf="last" (click)="addLayer()">Add layer</button>
         </div>
       </div>
