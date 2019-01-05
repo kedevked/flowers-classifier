@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class AppService {
-  baseUrl = 'http://localhost:5000/';
+  baseUrl = 'https://flowers-classifier.herokuapp.com/';
   constructor(private httpClient: HttpClient) { }
 
   predict(file, modelId ?: string) {
