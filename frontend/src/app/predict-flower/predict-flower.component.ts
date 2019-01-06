@@ -12,6 +12,7 @@ export class PredictFlowerComponent implements OnInit {
   file: any;
   flowerName: string;
   modelId: string;
+  showSpinner: boolean;
   constructor(private appService: AppService) { }
 
   ngOnInit() {
@@ -25,9 +26,11 @@ export class PredictFlowerComponent implements OnInit {
   }
 
   predict(modelId) {
-    console.log(modelId);
+    this.showSpinner = true;
+    this.flowerName = '';
     this.appService.predict(this.file, modelId).subscribe(
       (data: {name: string} ) => {
+        this.showSpinner = false;
         this.flowerName = data.name;
       });
   }

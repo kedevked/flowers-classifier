@@ -22,6 +22,9 @@
       <div *ngIf="flowerName">
         Flower: {{flowerName}}
       </div>
+      <div *ngIf="showSpinner">
+        <mat-spinner [diameter]="50"></mat-spinner>
+      </div>
     </span>
   </mat-card-title>
 </mat-card>

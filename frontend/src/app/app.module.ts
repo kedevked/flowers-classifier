@@ -7,7 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatToolbarModule, MatButtonModule,
          MatSidenavModule, MatIconModule, MatListModule, MatStepperModule, MatFormFieldModule, MatInputModule,
-         MatSelectModule, MatDividerModule } from '@angular/material';
+         MatSelectModule, MatDividerModule, MatProgressSpinnerModule } from '@angular/material';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { AppService } from './app.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -45,7 +45,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatFormFieldModule,
     MatSelectModule,
     MatDividerModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     AppService
